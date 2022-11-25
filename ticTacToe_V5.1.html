@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+	
+	<style>
+		html {
+			font-family: sans-serif;
+			text-align: center;
+			padding: 10px;
+			margin: 10px;
+			background-color: rgb(245,245,245);
+		}
+		
+		h1{
+		  font-size: 40px;
+		}
+	
+		.grid-container {
+		  display: grid;
+		  gap: 1px;
+		  grid-template-columns: repeat(3, 1fr);
+		  
+		}
+				
+		.tic-tac-toe-button {
+		  font-size: 60px;
+		  color: white;
+		  width: 100%;
+		  height: 150px;
+		  background-color: purple;
+		}
+
+		.menu-button {
+			display: block;
+			font-size: 20px;
+			width: 20%;
+			height: 45px;
+			margin-top: 1%;
+			float: left;
+		}
+
+		
+		#reset{
+			float: right;
+		}
+
+		.bottom-button {
+			clear: both;
+		}
+
+		#version-number{
+			display: inline-block;
+			color: hotpink;
+		}
+
+	</style>
+
+  <title>Tic Tac Toe</title>
+</head>
+
+<body>
+
+  <h1 id="title-text" >PLAYER X</h1>
+  <h2 id="subtitle-text">Player X: 0 /Player O: 0/ Tie: 0</h2>
+  <div class="grid-container">
+    <div  class="grid-item">
+		<button class="tic-tac-toe-button" id="top-left" onClick="executeTopLeft()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="top-center" onClick="executeTopCenter()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="top-right" onClick="executeTopRight()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="center-left" onClick="executeCenterLeft()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="center" onClick="executeCenter()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="center-right" onClick="executeCenterRight()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="bottom-left" onClick="executeBottomLeft()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="bottom-center" onClick="executeBottomCenter()"></button>
+	</div>
+	<div class="grid-item">
+		<button class="tic-tac-toe-button" id="bottom-right" onClick="executeBottomRight()"></button>
+	</div>
+  </div>
+
+<div class="bottom-button">
+
+	<button class="menu-button" id="playerNames" onClick ="enterPlayerInformation()">Enter Player Info</button>
+	<button class="menu-button" id="reset" onClick="resetBoard()">RESET</button>
+   
+</div>
+<div id="footer-area">
+	<div id="version-number"></div>
+</div>
+
+
+  <script>
+		
+		// vars
+		var player1 = "Player X";	var player2 = "Player O";
+		let playerX = true;
+		let playerMarker = 'X';
+		let tie = 0; 				let counter = 0;
+		let playerXScore = 0;		let playerOScore = 0;
+		let board = [	
+						0,0,0,
+						0,0,0,
+						0,0,0
+					];
+		let versionNumber = "5.1";
+
+		// fetching HTML data
+		titleText  		= document.getElementById('title-text');
+		subTitleText	= document.getElementById('subtitle-text');
+		restText 		= document.getElementById('reset'); //Improve name
+		
+		topLeft    		= document.getElementById('top-left');
+		topCenter  		= document.getElementById('top-center');
+		topRight   		= document.getElementById('top-right');
+		
+		centerLeft  	= document.getElementById('center-left');
+		center	    	= document.getElementById('center');
+		centerRight 	= document.getElementById('center-right');
+		
+		bottomLeft   	= document.getElementById('bottom-left');
+		bottomCenter 	= document.getElementById('bottom-center');
+		bottomRight  	= document.getElementById('bottom-right');
+
+		versionNumber	= document.getElementById('version-number').innerHTML = versionNumber;
+		ticTacToeButtons 	= document.getElementsByClassName('tic-tac-toe-button');
+		
+		const squaresArray = ['top-left','top-center','top-right',
+			'center-left','center','center-right',
+			'bottom-left','bottom-center','bottom-right'];
+		
+		function changePlayer(){
+			playerX = !playerX;
+			document.getElementById("title-text").innerHTML = (playerX ? player1 : player2);
+
+			// Flips player every time
+			playerMarker = (playerX ? 'X' : 'O');
+		}
+		
+		function executeTopLeft(){
+			topLeft.innerHTML = playerMarker;
+			score(0);
+			topLeft.disabled = true;
+		}
+		
+		function executeTopCenter(){
+			topCenter.innerHTML = playerMarker;
+			score(1);
+			topCenter.disabled = true;
+		}
+		
+		function executeTopRight(){
+			topRight.innerHTML = playerMarker;
+			score(2);
+			topRight.disabled = true;
+		}
+		function executeCenterLeft(){
+			centerLeft.innerHTML = playerMarker;
+			score(3);
+			centerLeft.disabled = true;
+		}
+		
+		function executeCenter(){
+			center.innerHTML = playerMarker;
+			score(4);
+			center.disabled = true;
+		}
+		
+		function executeCenterRight(){
+			centerRight.innerHTML = playerMarker;
+			score(5);
+			centerRight.disabled = true;
+		}
+		function executeBottomLeft(){
+			bottomLeft.innerHTML = playerMarker;
+			score(6);
+			bottomLeft.disabled = true;
+		}
+		function executeBottomCenter(){
+			bottomCenter.innerHTML = playerMarker;
+			score(7);
+			bottomCenter.disabled = true;
+		}
+		function executeBottomRight(){
+			bottomRight.innerHTML = playerMarker;
+			score(8);
+			bottomRight.disabled = true;
+		}		
+		
+		function enableAllButtons(){
+			topLeft.disabled = topCenter.disabled = topRight.disabled = centerLeft.disabled = center.disabled = false;
+			centerRight.disabled = bottomLeft.disabled = bottomCenter.disabled = bottomRight.disabled = false;
+		}
+		
+		function disableAllButtons(){
+			topLeft.disabled = topCenter.disabled = topRight.disabled = centerLeft.disabled = center.disabled = true;
+			centerRight.disabled = bottomLeft.disabled = bottomCenter.disabled = bottomRight.disabled = true;
+		}
+		
+		function resetBoard(){
+			for(var i=0; i<squaresArray.length; i++){
+				document.getElementById(squaresArray[i]).innerHTML = '';
+			}
+			titleText.innerHTML = player1;
+			enableAllButtons();
+			playerX = true;
+			playerMarker = 'X';
+			board.fill(0);
+			counter = 0; // remember to reset the counter
+			changeBackgroundColor("purple");
+		}
+		
+		function wonGame(){
+			
+			for(var i = 0; i<9; i += 3){
+				// Horizontal
+				if((Math.abs(board[i] + board[i+1] + board[i+2]) === 3)){
+					return true;
+				}
+			}
+			
+			for(var j = 0; j < 9; j += 1){
+				// Vertical
+				if((Math.abs(board[j] + board[j+3] + board[j+6]) === 3)){
+					return true;
+				}
+			}
+
+			if(				
+				// Diagonal
+				(Math.abs(board[0] + board[4] + board[8]) === 3) ||
+				(Math.abs(board[6] + board[4] + board[2]) === 3) 
+				
+			){
+				return true;
+			}else{
+				return false;
+			}
+		}
+				
+		function score(place){
+			board[place] = (playerX ? 1 : -1);
+			
+			if(wonGame()){
+				
+				titleText.innerHTML = (playerX ? player1 : player2) + " won!!!";
+				disableAllButtons();
+				// final score
+				playerX ? playerXScore++ : playerOScore++;
+				// formatter
+				subTitleFormatter(player1,player2)
+				playerX ? changeBackgroundColor("blue") : changeBackgroundColor("green");
+			}else{
+				changePlayer();
+				counter++;
+			}
+			
+			// Handle the case if tied
+			if(counter === 9){
+				titleText.innerHTML = "TIEEEE";
+				tie++;
+				subTitleFormatter(player1, player2);
+				changeBackgroundColor("hotpink")
+			}
+		}
+		
+		function enterPlayerInformation(){
+			player1 = prompt("Tell me your name there X-Player: ");			
+			player2 = prompt("Tell me your name there O-Player: ");
+			if (player1 === ""){
+				console.log("player 1: empty string");
+				player1 = "Player X";
+			}
+
+			if (player2 === ""){
+				console.log("player 2: empty string");
+				player2 = "Player O"
+			}
+			subTitleFormatter(player1, player2);
+		}
+		
+		function subTitleFormatter(player1, player2){
+			subTitleText.innerHTML = player1 + ': ' + playerXScore + "\t" + player2 + ': ' + playerOScore + ' Tie:'+ tie;
+		}
+
+		function changeBackgroundColor(color){
+			for(let i=0; i < 9; i++){
+					ticTacToeButtons[i].style.backgroundColor = color;
+				}
+		}
+		
+  </script>
+  
+</body>
+</html>
